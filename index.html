@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BERIL - BER Intelligence Layer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #1B2F5B;
+    --navy-light: #2A4178;
+    --green: #4CA530;
+    --green-light: #E5F5DE;
+    --navy-pale: #E8EDF5;
+    --charcoal: #2D2D2D;
+    --mid-gray: #555;
+    --light-gray: #E8E8E4;
+    --bg: #FAFAF8;
+    --white: #fff;
+  }
+
+  body {
+    font-family: "Source Sans 3", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--charcoal);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .accent-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy) 60%, var(--green) 100%);
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Hero with background image */
+  .hero {
+    background: url('BERIL-splash-bg-image.png') center/cover no-repeat;
+    position: relative;
+    padding: 3.5rem 0;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(27,47,91,0.82) 0%, rgba(27,47,91,0.6) 50%, rgba(76,165,48,0.3) 100%);
+  }
+
+  .hero .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    margin-bottom: 0.15rem;
+  }
+
+  .hero .subtitle {
+    font-size: 1.5rem;
+    color: rgba(255,255,255,0.9);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero .tagline {
+    font-size: 1.25rem;
+    color: rgba(255,255,255,0.95);
+    font-weight: 400;
+    max-width: 540px;
+  }
+
+  /* Sections */
+  section {
+    padding: 2rem 0;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--navy);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 0.9rem;
+    color: var(--charcoal);
+    font-size: 1rem;
+  }
+
+  a.inline-link {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--navy-pale);
+  }
+
+  a.inline-link:hover {
+    border-bottom-color: var(--navy);
+  }
+
+  /* About — navy border */
+  .about {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    padding: 1.8rem 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .about p {
+    max-width: 720px;
+  }
+
+  /* Workflow — pill steps */
+  .workflow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.4rem 0 1.2rem;
+  }
+
+  .workflow-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .workflow-step .step-name {
+    display: inline-block;
+    background: var(--navy-pale);
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 2px;
+  }
+
+  .workflow-step .arrow {
+    color: var(--navy);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  /* CTA block */
+  .cta-block {
+    background: var(--navy);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 0;
+  }
+
+  .cta-block .cta-text {
+    color: rgba(255,255,255,0.85);
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+
+  .cta-block .cta-text strong {
+    color: var(--white);
+  }
+
+  .cta {
+    display: inline-block;
+    background: var(--white);
+    color: var(--navy);
+    text-decoration: none;
+    padding: 0.65rem 1.6rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 3px;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .cta:hover {
+    background: var(--navy-pale);
+    transform: translateY(-1px);
+  }
+
+  /* Team section — green border */
+  .team-section {
+    border: 2px solid var(--green);
+    background: var(--white);
+    padding: 1.8rem 2rem;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.2rem;
+    margin-top: 0.5rem;
+  }
+
+  .team-member {
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  .team-member .photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    border: 2px solid var(--light-gray);
+  }
+
+  .team-member .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--charcoal);
+  }
+
+  .team-member .role {
+    font-size: 0.85rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .team-member .org {
+    font-size: 0.82rem;
+    color: var(--mid-gray);
+  }
+
+  /* GitHub link block */
+  .repo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--navy-pale);
+    border: 1px solid #cdd6e6;
+    padding: 1rem 1.4rem;
+    margin-top: 2rem;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .repo-link:hover {
+    border-color: var(--navy);
+  }
+
+  .repo-link .repo-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .repo-link .repo-text {
+    color: var(--charcoal);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .repo-link .repo-text strong {
+    color: var(--navy);
+    display: block;
+    font-size: 1rem;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 2rem;
+    padding: 1.5rem 0;
+    border-top: 3px solid var(--navy);
+    font-size: 0.88rem;
+    color: var(--mid-gray);
+  }
+
+  .footer-content {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-content img {
+    height: 50px;
+    width: auto;
+  }
+
+  .footer-text {
+    flex: 1;
+  }
+
+  footer a {
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  footer .footer-links {
+    margin-bottom: 0.5rem;
+  }
+
+  footer .footer-links a + a {
+    margin-left: 1.5rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2rem; }
+    .hero .subtitle { font-size: 1.2rem; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .workflow { flex-direction: column; gap: 0.4rem; }
+    .workflow-step .arrow { display: none; }
+    .about, .team-section { padding: 1.2rem 1rem; }
+    .cta-block { flex-direction: column; text-align: center; }
+    .footer-content { flex-direction: column; text-align: center; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="accent-bar"></div>
+
+<div class="hero">
+  <div class="container">
+    <h1>BERIL</h1>
+    <div class="subtitle">BER Intelligence Layer</div>
+    <div class="tagline">An AI co-scientist for DOE biosciences research</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <section>
+    <div class="about">
+      <h2>About</h2>
+      <p>
+        BERIL is the agentic intelligence layer on top of the
+        <a class="inline-link" href="https://www.kbase.us/">KBase</a> Data Lakehouse&mdash;consistently
+        labeled, harmonized datasets spanning genomics, metagenomics, fitness, and environmental data.
+        BERIL turns that integrated data into actionable research by pairing human scientists with
+        an AI agent that can plan analyses, query datasets, write and execute code, and synthesize findings.
+      </p>
+      <p>
+        Each BERIL project follows a structured cycle. The human provides a research question;
+        the agent produces a plan, executes analyses, and compiles a report with claims and caveats.
+        The human reviews the evidence, and the resulting data products feed future work.
+      </p>
+
+      <div class="workflow">
+        <span class="workflow-step"><span class="step-name">Question</span><span class="arrow">&rarr;</span></span>
+        <span class="workflow-step"><span class="step-name">Plan</span><span class="arrow">&rarr;</span></span>
+        <span class="workflow-step"><span class="step-name">Run</span><span class="arrow">&rarr;</span></span>
+        <span class="workflow-step"><span class="step-name">Synthesize</span><span class="arrow">&rarr;</span></span>
+        <span class="workflow-step"><span class="step-name">Review</span><span class="arrow">&rarr;</span></span>
+        <span class="workflow-step"><span class="step-name">Reuse</span></span>
+      </div>
+
+      <p style="margin-bottom: 0;">
+        BERIL is funded by the Department of Energy's
+        <a class="inline-link" href="https://science.osti.gov/ber">Biological and Environmental Research</a>
+        program and developed at Lawrence Berkeley National Laboratory.
+      </p>
+    </div>
+
+    <div class="cta-block">
+      <div class="cta-text"><strong>Ready to explore?</strong> Use BERIL to accelerate your research.</div>
+      <a class="cta" href="https://beril.kbase.us/">Try BERIL &rarr;</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="team-section">
+      <h2>Team</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <img class="photo" src="photos/dehal-paramvir.png" alt="Paramvir Dehal">
+          <div class="name">Paramvir Dehal</div>
+          <div class="role">PI</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/mungall-chris.jpeg" alt="Chris Mungall">
+          <div class="name">Chris Mungall</div>
+          <div class="role">co-PI</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/fagnan-kjiersten.webp" alt="Kjiersten Fagnan">
+          <div class="name">Kjiersten Fagnan</div>
+          <div class="role">co-PI</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/harris-nomi.jpg" alt="Nomi Harris">
+          <div class="name">Nomi Harris</div>
+          <div class="role">Project Manager</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/riehl-william.png" alt="William Riehl">
+          <div class="name">William Riehl</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/reese-justin.png" alt="Justin Reese">
+          <div class="name">Justin Reese</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/kishore-dileep.jpeg" alt="Dileep Kishore">
+          <div class="name">Dileep Kishore</div>
+          <div class="org">ORNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/cashman-mikaela.jpg" alt="Mikaela Cashman">
+          <div class="name">Mikaela Cashman</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/miller-mark.jpg" alt="Mark Miller">
+          <div class="name">Mark Miller</div>
+          <div class="org">LBNL</div>
+        </div>
+        <div class="team-member">
+          <img class="photo" src="photos/neely-chris.png" alt="Chris Neely">
+          <div class="name">Chris Neely</div>
+          <div class="org">LBNL</div>
+        </div>
+      </div>
+    </div>
+
+    <a class="repo-link" href="https://github.com/kbaseincubator/BERIL-research-observatory">
+      <span class="repo-icon">&#128193;</span>
+      <span class="repo-text">
+        <strong>BERIL Research Observatory</strong>
+        Source code and project documentation on GitHub
+      </span>
+    </a>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://beril.kbase.us/">BERIL App</a>
+      <a href="https://www.kbase.us/">KBase</a>
+      <a href="https://github.com/kbaseincubator/BERIL-research-observatory">GitHub</a>
+    </div>
+    <div class="footer-content">
+      <img src="doe-logo.png" alt="U.S. Department of Energy">
+      <div class="footer-text">The BERIL project is supported by the U.S. Department of Energy Biological &amp; Environmental Research program.</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
